@@ -70,6 +70,29 @@ namespace "nginx" do
             puts "#{nginx_config} updated: #{s}"
         end
     end
+
+    task "site", [:name] => "passenger" do |t, args|
+        name = args[:name] 
+        config_path = "/etc/nginx/sites-available/#{name}"
+        config = "server {
+            listen 80;
+            server_name #{name};
+            passenger_enabled on; 
+            passenger_ruby /var/www/#{name}/passenger-ruby;
+            root /var/www/#{name}/public; 
+        }\n"
+
+        raise "site name required" if name.nil?
+
+        if !File.exist? "/var/www/#{name}"
+            mkdir_p "/var/www/#{name}"
+        end
+
+        if !File.exist? config_path
+            File.write(config_path, config)
+            ln_s config_path, config_path.gsub("sites-available", "sites-enabled")
+        end
+    end
 end
 
 class File
