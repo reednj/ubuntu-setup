@@ -48,6 +48,9 @@ namespace "ruby" do
         v = args[:v] || "2.2.6"
         sh "ruby-install"
         sh "ruby-install --no-reinstall ruby #{v}"
+
+        # now install at least bundler for the ruby
+        # ...
     end
 
 end
