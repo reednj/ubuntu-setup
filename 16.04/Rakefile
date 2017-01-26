@@ -4,7 +4,14 @@
 #
 
 # force sudo get the password, because it might be needed later on
-system "sudo echo sudo activated"
+
+def sudo?
+    Process.uid == 0
+end
+
+def sudo_required!
+    raise 'Must run as root' unless sudo?
+end
 
 namespace "ruby" do
     task "chruby" do
@@ -13,7 +20,7 @@ namespace "ruby" do
             sh "wget -O #{name}.tar.gz https://github.com/postmodern/chruby/archive/v0.3.9.tar.gz"
             sh "tar -xzvf #{name}.tar.gz"
             
-            Dir.chdir("#{name}") do 
+            Dir.chdir("#{name}") do
                 sh "sudo make install"
             end
 
@@ -44,6 +51,7 @@ namespace "ruby" do
         end
     end
 
+    desc "install a ruby with the version given in the argument"
     task "install", [:v] => ["installer", "chruby", "chruby_bashrc"] do |t,args|
         v = args[:v] || "2.2.6"
         sh "ruby-install"
@@ -57,13 +65,16 @@ end
 
 namespace "nginx" do
     task "install" do
+        sudo_required!
         unless File.exist? "/etc/nginx/passenger.conf"
             sh "chmod 755 install.nginx.sh"
             sh "./install.nginx.sh"
         end
     end
 
+    desc "install nginx with the passenger pugin"
     task "passenger" => "install" do
+        sudo_required!
         nginx_config = "/etc/nginx/nginx.conf"
         comment_line = "# include /etc/nginx/passenger.conf;"
         if File.include?(nginx_config, comment_line)
@@ -75,6 +86,7 @@ namespace "nginx" do
     end
 
     task "site", [:name] => "passenger" do |t, args|
+        sudo_required!
         name = args[:name] 
         config_path = "/etc/nginx/sites-available/#{name}"
         config = "server {
