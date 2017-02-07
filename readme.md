@@ -10,9 +10,9 @@ With a fresh installation, on a non-root account:
 
  Then use rake to run the other setup tasks. Use `rake -T` to see a list of available tasks
 
-    $ rake -T
-    rake nginx:passenger  # install nginx with the passenger pugin
-    rake ruby:install[v]  # install a ruby with the version given in the argument
+      $ rake -T
+      rake nginx:passenger  # install nginx with the passenger pugin
+      rake ruby:install[v]  # install a ruby with the version given in the argument
 
 Use `ruby:install` to install a particular version of ruby via `chruby`.
 
