@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# curl https://raw.githubusercontent.com/reednj/ubuntu-setup/master/apps/install.twtxt.sh | bash
+#
 
 set -e
 sudo echo 'have sudo'
