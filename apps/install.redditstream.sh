@@ -3,6 +3,8 @@
 # assume we have chruby install with the appropriate
 # version of ruby
 #
+# run this like so: 
+#
 
 set -e
 sudo echo 'have sudo'
