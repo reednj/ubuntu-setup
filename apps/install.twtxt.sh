@@ -20,7 +20,10 @@ mv twtxt-directory twtxt.git
 gem install rake
 sudo gem install rake
 
+
 # provision the app, and then install
 cd ~/code/twtxt.git
+gem install git_make_mirror
+git make-mirror -l
 sudo rake app:provision
 rake app:install
